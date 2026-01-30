@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon Engine | Script Marketplace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6d28d9;
+            --primary-dark: #5b21b6;
+            --secondary: #0ea5e9;
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --dark-border: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--dark-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            color: var(--secondary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { text-shadow: 0 0 5px var(--secondary); }
+            50% { text-shadow: 0 0 15px var(--secondary); }
+            100% { text-shadow: 0 0 5px var(--secondary); }
+        }
+
+        .logo h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background-color: rgba(30, 41, 59, 0.5);
+        }
+
+        .nav-link.active {
+            color: var(--secondary);
+            background-color: rgba(14, 165, 233, 0.1);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--secondary);
+            border: 1px solid var(--secondary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(14, 165, 233, 0.1);
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #0da271;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        /* Main Content */
+        main {
+            padding: 30px 0;
+            min-height: calc(100vh - 180px);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Dashboard */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            background-color: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* Script Cards */
+        .scripts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .script-card {
+            background-color: var(--dark-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--dark-border);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .script-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: var(--secondary);
+        }
+
+        .script-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .script-content {
+            padding: 20px;
+        }
+
+        .script-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .script-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .script-author {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .script-desc {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .script-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background-color: rgba(30, 41, 59, 0.8);
+            color: var(--text-secondary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid var(--dark-border);
+        }
+
+        .tag:hover {
+            background-color: var(--primary);
+            color: white;
+            cursor: pointer;
+        }
+
+        .script-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .copy-btn.copied {
+            background-color: var(--success);
+        }
+
+        /* Login & Register Forms */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70vh;
+        }
+
+        .auth-box {
+            background-color: var(--dark-card);
+            border-radius: var(--radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid var(--dark-border);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .auth-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .auth-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .auth-form input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--dark-border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .auth-form input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--text-secondary);
+        }
+
+        .auth-link {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Developer Dashboard */
+        .developer-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .publish-form {
+            background-color: var(--dark-card);
+            border-radius: var(--radius);
+            padding: 25px;
+            border: 1px solid var(--dark-border);
+            margin-bottom: 30px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--dark-border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            min-height: 120px;
+            resize: vertical;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        /* Comments Section */
+        .comments-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--dark-border);
+        }
+
+        .comments-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .comment {
+            background-color: rgba(30, 41, 59, 0.5);
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .comment-date {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .comment-text {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Profile Section */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: var(--dark-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--dark-border);
+        }
+
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary);
+        }
+
+        .profile-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .profile-info p {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .upload-btn {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .upload-btn input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            background-color: rgba(15, 23, 42, 0.95);
+            border-top: 1px solid var(--dark-border);
+            padding: 20px 0;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            color: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        /* Scrollbars */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--dark-border) var(--dark-bg);
+        }
+
+        *::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background-color: var(--dark-border);
+            border-radius: 10px;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background-color: var(--secondary);
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: var(--radius);
+            color: white;
+            font-weight: 600;
+            z-index: 10000;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: opacity 0.3s, transform 0.3s;
+            max-width: 350px;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background-color: var(--success);
+        }
+
+        .notification.error {
+            background-color: var(--danger);
+        }
+
+        .notification.info {
+            background-color: var(--secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .scripts-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+            
+            .search-container {
+                max-width: 100%;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo">
+                <div class="logo-icon">🌙</div>
+                <h1>Moon Engine</h1>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#" class="nav-link active" data-page="dashboard">Dashboard</a>
+                <a href="#" class="nav-link" data-page="profile">Profile</a>
+                <div class="auth-buttons" id="authButtons">
+                    <!-- Buttons will be dynamically inserted here -->
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Dashboard Page -->
+        <section id="dashboard" class="page active">
+            <div class="dashboard-header">
+                <h2>Script Marketplace</h2>
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Cari script berdasarkan nama atau tag...">
+                </div>
+            </div>
+            
+            <div id="scriptsContainer" class="scripts-grid">
+                <!-- Script cards will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <!-- Profile Page -->
+        <section id="profile" class="page">
+            <div class="profile-header">
+                <img src="https://via.placeholder.com/120" alt="Profile Picture" class="profile-pic" id="profilePicture">
+                <div class="profile-info">
+                    <h2 id="profileUsername">Guest</h2>
+                    <p id="profileRole">Pengunjung</p>
+                    <div class="upload-btn">
+                        <button class="btn btn-outline">
+                            <i class="fas fa-upload"></i> Upload Foto
+                        </button>
+                        <input type="file" id="uploadPhoto" accept="image/*">
+                    </div>
+                </div>
+            </div>
+            
+            <div id="profileScripts">
+                <!-- User's scripts will appear here for developers -->
+            </div>
+        </section>
+
+        <!-- Login Page -->
+        <section id="login" class="page">
+            <div class="auth-container">
+                <div class="auth-box">
+                    <h2 class="auth-title">Login ke Moon Engine</h2>
+                    <form class="auth-form" id="loginForm">
+                        <div class="form-group">
+                            <label for="loginUsername">Username</label>
+                            <input type="text" id="loginUsername" placeholder="Masukkan username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" placeholder="Masukkan password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+                    </form>
+                    <div class="auth-footer">
+                        <p>Belum punya akun? <a href="#" class="auth-link" data-page="register">Daftar di sini</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Register Page -->
+        <section id="register" class="page">
+            <div class="auth-container">
+                <div class="auth-box">
+                    <h2 class="auth-title">Daftar Akun Baru</h2>
+                    <form class="auth-form" id="registerForm">
+                        <div class="form-group">
+                            <label for="registerUsername">Username</label>
+                            <input type="text" id="registerUsername" placeholder="Pilih username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" placeholder="Buat password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Konfirmasi Password</label>
+                            <input type="password" id="confirmPassword" placeholder="Ulangi password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Daftar</button>
+                    </form>
+                    <div class="auth-footer">
+                        <p>Sudah punya akun? <a href="#" class="auth-link" data-page="login">Login di sini</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Developer Dashboard -->
+        <section id="developer" class="page">
+            <div class="dashboard-header">
+                <h2>Developer Dashboard</h2>
+                <button class="btn btn-primary" id="showPublishForm">
+                    <i class="fas fa-plus"></i> Publikasi Script Baru
+                </button>
+            </div>
+            
+            <div id="publishFormContainer" style="display: none;">
+                <div class="publish-form">
+                    <h3>Publikasi Script Baru</h3>
+                    <form id="publishForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="scriptName">Nama Script</label>
+                                <input type="text" id="scriptName" placeholder="Nama script" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="scriptTags">Tags (pisahkan dengan koma)</label>
+                                <input type="text" id="scriptTags" placeholder="Contoh: Game, UI, Tools" required>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="scriptDescription">Deskripsi</label>
+                            <textarea id="scriptDescription" placeholder="Deskripsi lengkap tentang script Anda" required></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="scriptCode">Kode Script</label>
+                            <textarea id="scriptCode" placeholder="Tempel kode script Anda di sini" rows="8" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="scriptImage">URL Gambar (opsional)</label>
+                                <input type="text" id="scriptImage" placeholder="https://example.com/image.jpg">
+                            </div>
+                            <div class="form-group">
+                                <label for="scriptCategory">Kategori</label>
+                                <select id="scriptCategory" style="width: 100%; padding: 12px 15px; background-color: rgba(15, 23, 42, 0.7); border: 1px solid var(--dark-border); border-radius: 6px; color: var(--text-primary);">
+                                    <option value="Game">Game</option>
+                                    <option value="UI">UI/UX</option>
+                                    <option value="Tools">Tools</option>
+                                    <option value="Animation">Animation</option>
+                                    <option value="Other">Lainnya</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group full-width" style="display: flex; gap: 10px;">
+                            <button type="submit" class="btn btn-success">Publikasi</button>
+                            <button type="button" class="btn btn-outline" id="cancelPublish">Batal</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <h3>Script Saya</h3>
+            <div id="myScriptsContainer" class="scripts-grid">
+                <!-- Developer's scripts will appear here -->
+            </div>
+        </section>
+
+        <!-- Script Detail Page -->
+        <section id="scriptDetail" class="page">
+            <div id="detailContainer">
+                <!-- Script detail will be dynamically inserted here -->
+            </div>
+            
+            <div class="comments-section">
+                <h3 class="comments-title">Komentar</h3>
+                <form class="comment-form" id="commentForm">
+                    <textarea id="commentText" placeholder="Tulis komentar Anda di sini..." required></textarea>
+                    <button type="submit" class="btn btn-primary" style="align-self: flex-end;">Kirim Komentar</button>
+                </form>
+                <div id="commentsContainer">
+                    <!-- Comments will be dynamically inserted here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="copyright">
+                <p>© 2023 Moon Engine - Script Marketplace | Dibuat dengan <i class="fas fa-heart" style="color: var(--danger);"></i></p>
+            </div>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Data inisialisasi
+        let currentUser = null;
+        let scripts = [
+            {
+                id: 1,
+                name: "Auto Clicker Game",
+                author: "dinooodev",
+                description: "Script auto clicker untuk game dengan konfigurasi kecepatan yang dapat disesuaikan.",
+                code: "// Auto Clicker Script\nfunction autoClick(interval = 100) {\n  setInterval(() => {\n    document.activeElement.click();\n  }, interval);\n}\n\n// Penggunaan\nautoClick(150);",
+                tags: ["Game", "Automation", "Tools"],
+                category: "Game",
+                image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                likes: 24,
+                publishedBy: "dinooodev",
+                publishedDate: "2023-10-15",
+                comments: [
+                    { user: "Player1", text: "Script ini sangat membantu!", date: "2023-10-16" },
+                    { user: "GamerX", text: "Bisa untuk game apa saja?", date: "2023-10-17" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Dark Mode Toggle",
+                author: "dinooodev",
+                description: "Toggle dark mode yang smooth dengan animasi transisi yang keren.",
+                code: "// Dark Mode Toggle\nconst darkModeToggle = document.getElementById('darkToggle');\nconst body = document.body;\n\ndarkModeToggle.addEventListener('click', () => {\n  body.classList.toggle('dark-mode');\n  localStorage.setItem('darkMode', body.classList.contains('dark-mode'));\n});\n\n// Inisialisasi\nif (localStorage.getItem('darkMode') === 'true') {\n  body.classList.add('dark-mode');\n}",
+                tags: ["UI", "Dark Mode", "Animation"],
+                category: "UI",
+                image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1208&q=80",
+                likes: 42,
+                publishedBy: "dinooodev",
+                publishedDate: "2023-10-10",
+                comments: [
+                    { user: "DesignerPro", text: "Animasi transisinya smooth banget!", date: "2023-10-11" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Random Password Generator",
+                author: "scriptMaster",
+                description: "Generator password acak dengan berbagai opsi keamanan.",
+                code: "function generatePassword(length = 12, useSpecial = true) {\n  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\n  const special = '!@#$%^&*()_+-=[]{}|;:,.<>?';\n  let charSet = chars + (useSpecial ? special : '');\n  \n  let password = '';\n  for (let i = 0; i < length; i++) {\n    password += charSet.charAt(Math.floor(Math.random() * charSet.length));\n  }\n  \n  return password;\n}",
+                tags: ["Security", "Tools", "Generator"],
+                category: "Tools",
+                image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                likes: 18,
+                publishedBy: "scriptMaster",
+                publishedDate: "2023-10-05",
+                comments: []
+            }
+        ];
+
+        let users = [
+            { username: "dinooodev", password: "dinooooffocial", role: "developer" },
+            { username: "player1", password: "password123", role: "player" },
+            { username: "scriptMaster", password: "master123", role: "developer" }
+        ];
+
+        // DOM Elements
+        const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const authButtons = document.getElementById('authButtons');
+        const searchInput = document.getElementById('searchInput');
+        const scriptsContainer = document.getElementById('scriptsContainer');
+        const profileUsername = document.getElementById('profileUsername');
+        const profileRole = document.getElementById('profileRole');
+        const profileScripts = document.getElementById('profileScripts');
+        const myScriptsContainer = document.getElementById('myScriptsContainer');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const publishForm = document.getElementById('publishForm');
+        const showPublishFormBtn = document.getElementById('showPublishForm');
+        const publishFormContainer = document.getElementById('publishFormContainer');
+        const cancelPublishBtn = document.getElementById('cancelPublish');
+        const commentForm = document.getElementById('commentForm');
+        const uploadPhoto = document.getElementById('uploadPhoto');
+        const profilePicture = document.getElementById('profilePicture');
+        const notification = document.getElementById('notification');
+
+        // Initialize the app
+        function init() {
+            // Check if user is logged in from localStorage
+            const savedUser = localStorage.getItem('moonEngineUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+            }
+            
+            updateUI();
+            renderScripts(scripts);
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Show notification on first load
+            setTimeout(() => {
+                showNotification('Selamat datang di Moon Engine Marketplace!', 'info');
+            }, 1000);
+        }
+
+        // Setup all event listeners
+        function setupEventListeners() {
+            // Navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    showPage(page);
+                    
+                    // Update active nav link
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                });
+            });
+
+            // Auth buttons (dynamic)
+            document.addEventListener('click', (e) => {
+                if (e.target.id === 'logoutBtn') {
+                    logout();
+                }
+                if (e.target.id === 'loginBtn') {
+                    showPage('login');
+                }
+                if (e.target.id === 'registerBtn') {
+                    showPage('register');
+                }
+            });
+
+            // Search
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredScripts = scripts.filter(script => 
+                    script.name.toLowerCase().includes(searchTerm) ||
+                    script.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+                    script.author.toLowerCase().includes(searchTerm) ||
+                    script.description.toLowerCase().includes(searchTerm)
+                );
+                renderScripts(filteredScripts);
+            });
+
+            // Login form
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                login(username, password);
+            });
+
+            // Register form
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('registerUsername').value;
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    showNotification('Password tidak cocok!', 'error');
+                    return;
+                }
+                
+                register(username, password);
+            });
+
+            // Publish script
+            showPublishFormBtn?.addEventListener('click', () => {
+                publishFormContainer.style.display = 'block';
+                showPublishFormBtn.style.display = 'none';
+            });
+
+            cancelPublishBtn?.addEventListener('click', () => {
+                publishFormContainer.style.display = 'none';
+                showPublishFormBtn.style.display = 'block';
+                publishForm.reset();
+            });
+
+            publishForm?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                if (!currentUser || currentUser.role !== 'developer') {
+                    showNotification('Hanya developer yang dapat mempublikasi script!', 'error');
+                    return;
+                }
+                
+                const name = document.getElementById('scriptName').value;
+                const tags = document.getElementById('scriptTags').value.split(',').map(tag => tag.trim());
+                const description = document.getElementById('scriptDescription').value;
+                const code = document.getElementById('scriptCode').value;
+                const image = document.getElementById('scriptImage').value || `https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80`;
+                const category = document.getElementById('scriptCategory').value;
+                
+                const newScript = {
+                    id: scripts.length + 1,
+                    name,
+                    author: currentUser.username,
+                    description,
+                    code,
+                    tags,
+                    category,
+                    image,
+                    likes: 0,
+                    publishedBy: currentUser.username,
+                    publishedDate: new Date().toISOString().split('T')[0],
+                    comments: []
+                };
+                
+                scripts.unshift(newScript);
+                renderScripts(scripts);
+                publishFormContainer.style.display = 'none';
+                showPublishFormBtn.style.display = 'block';
+                publishForm.reset();
+                
+                showNotification('Script berhasil dipublikasikan!', 'success');
+                
+                // Update developer dashboard
+                if (currentUser.role === 'developer') {
+                    renderMyScripts();
+                }
+            });
+
+            // Comment form
+            commentForm?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                if (!currentUser) {
+                    showNotification('Anda harus login untuk mengirim komentar!', 'error');
+                    return;
+                }
+                
+                const commentText = document.getElementById('commentText').value;
+                const currentScriptId = parseInt(localStorage.getItem('currentScriptId'));
+                
+                if (currentScriptId) {
+                    const script = scripts.find(s => s.id === currentScriptId);
+                    if (script) {
+                        script.comments.unshift({
+                            user: currentUser.username,
+                            text: commentText,
+                            date: new Date().toISOString().split('T')[0]
+                        });
+                        
+                        // Render comments
+                        renderComments(script.comments);
+                        document.getElementById('commentText').value = '';
+                        
+                        showNotification('Komentar berhasil dikirim!', 'success');
+                    }
+                }
+            });
+
+            // Upload photo
+            uploadPhoto?.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        profilePicture.src = event.target.result;
+                        // Save to localStorage
+                        if (currentUser) {
+                            currentUser.profilePic = event.target.result;
+                            localStorage.setItem('moonEngineUser', JSON.stringify(currentUser));
+                            showNotification('Foto profil berhasil diubah!', 'success');
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Show specific page
+        function showPage(pageName) {
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            const pageElement = document.getElementById(pageName);
+            if (pageElement) {
+                pageElement.classList.add('active');
+                
+                // Update page-specific content
+                if (pageName === 'profile') {
+                    updateProfilePage();
+                } else if (pageName === 'developer') {
+                    if (currentUser && currentUser.role === 'developer') {
+                        renderMyScripts();
+                    } else {
+                        showPage('dashboard');
+                        showNotification('Halaman ini hanya untuk developer!', 'error');
+                    }
+                } else if (pageName === 'dashboard') {
+                    renderScripts(scripts);
+                }
+            }
+            
+            // Update nav links
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === pageName) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Update UI based on auth state
+        function updateUI() {
+            // Update auth buttons
+            if (currentUser) {
+                authButtons.innerHTML = `
+                    <span style="color: var(--text-secondary); margin-right: 10px;">Hi, ${currentUser.username}!</span>
+                    ${currentUser.role === 'developer' ? `<a href="#" class="nav-link" data-page="developer">Developer</a>` : ''}
+                    <button class="btn btn-danger btn-small" id="logoutBtn">Logout</button>
+                `;
+                
+                // Update profile page
+                updateProfilePage();
+            } else {
+                authButtons.innerHTML = `
+                    <button class="btn btn-outline btn-small" id="loginBtn">Login</button>
+                    <button class="btn btn-primary btn-small" id="registerBtn">Register</button>
+                `;
+            }
+            
+            // Update profile info
+            if (currentUser) {
+                profileUsername.textContent = currentUser.username;
+                profileRole.textContent = currentUser.role === 'developer' ? 'Developer' : 'Player';
+                
+                if (currentUser.profilePic) {
+                    profilePicture.src = currentUser.profilePic;
+                }
+            } else {
+                profileUsername.textContent = 'Guest';
+                profileRole.textContent = 'Pengunjung';
+            }
+        }
+
+        // Update profile page
+        function updateProfilePage() {
+            if (!currentUser) {
+                profileScripts.innerHTML = '<p>Login untuk melihat profil Anda.</p>';
+                return;
+            }
+            
+            if (currentUser.role === 'developer') {
+                const myScripts = scripts.filter(script => script.author === currentUser.username);
+                if (myScripts.length > 0) {
+                    let scriptsHTML = '<h3>Script Saya</h3><div class="scripts-grid">';
+                    myScripts.forEach(script => {
+                        scriptsHTML += createScriptCardHTML(script);
+                    });
+                    scriptsHTML += '</div>';
+                    profileScripts.innerHTML = scriptsHTML;
+                    
+                    // Add event listeners to copy buttons
+                    setTimeout(() => {
+                        document.querySelectorAll('#profileScripts .copy-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const scriptId = parseInt(e.target.closest('.script-card').getAttribute('data-id'));
+                                copyScriptCode(scriptId);
+                            });
+                        });
+                        
+                        // Add event listeners to view detail buttons
+                        document.querySelectorAll('#profileScripts .view-detail-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const scriptId = parseInt(e.target.closest('.script-card').getAttribute('data-id'));
+                                showScriptDetail(scriptId);
+                            });
+                        });
+                    }, 100);
+                } else {
+                    profileScripts.innerHTML = '<p>Anda belum mempublikasi script.</p>';
+                }
+            } else {
+                profileScripts.innerHTML = '<p>Anda login sebagai player. Upgrade ke developer untuk mempublikasi script.</p>';
+            }
+        }
+
+        // Render scripts to the dashboard
+        function renderScripts(scriptsToRender) {
+            if (scriptsToRender.length === 0) {
+                scriptsContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-secondary);">Tidak ada script yang ditemukan.</p>';
+                return;
+            }
+            
+            scriptsContainer.innerHTML = '';
+            scriptsToRender.forEach(script => {
+                scriptsContainer.innerHTML += createScriptCardHTML(script);
+            });
+            
+            // Add event listeners to copy buttons
+            setTimeout(() => {
+                document.querySelectorAll('.copy-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const scriptId = parseInt(e.target.closest('.script-card').getAttribute('data-id'));
+                        copyScriptCode(scriptId);
+                    });
+                });
+                
+                // Add event listeners to view detail buttons
+                document.querySelectorAll('.view-detail-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const scriptId = parseInt(e.target.closest('.script-card').getAttribute('data-id'));
+                        showScriptDetail(scriptId);
+                    });
+                });
+            }, 100);
+        }
+
+        // Create HTML for a script card
+        function createScriptCardHTML(script) {
+            const isDeveloper = currentUser && currentUser.role === 'developer';
+            const canCopy = currentUser || script.publishedBy === 'dinooodev';
+            
+            return `
+                <div class="script-card" data-id="${script.id}">
+                    <img src="${script.image}" alt="${script.name}" class="script-image">
+                    <div class="script-content">
+                        <div class="script-header">
+                            <div>
+                                <h3 class="script-name">${script.name}</h3>
+                                <p class="script-author"><i class="fas fa-user"></i> ${script.author}</p>
+                            </div>
+                            <div style="color: var(--accent); font-size: 0.9rem;">
+                                <i class="fas fa-heart"></i> ${script.likes}
+                            </div>
+                        </div>
+                        <p class="script-desc">${script.description}</p>
+                        <div class="script-tags">
+                            ${script.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                        </div>
+                        <div class="script-actions">
+                            ${canCopy ? 
+                                `<button class="copy-btn"><i class="fas fa-copy"></i> Copy Script</button>` : 
+                                `<button class="btn btn-outline btn-small" onclick="showNotification('Login terlebih dahulu untuk menyalin script!', 'error')"><i class="fas fa-copy"></i> Login untuk Copy</button>`
+                            }
+                            <button class="btn btn-outline btn-small view-detail-btn">Detail</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render developer's own scripts
+        function renderMyScripts() {
+            if (!currentUser || currentUser.role !== 'developer') return;
+            
+            const myScripts = scripts.filter(script => script.author === currentUser.username);
+            
+            if (myScripts.length === 0) {
+                myScriptsContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-secondary);">Anda belum mempublikasi script.</p>';
+                return;
+            }
+            
+            myScriptsContainer.innerHTML = '';
+            myScripts.forEach(script => {
+                myScriptsContainer.innerHTML += createScriptCardHTML(script);
+            });
+            
+            // Add event listeners
+            setTimeout(() => {
+                document.querySelectorAll('#myScriptsContainer .copy-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const scriptId = parseInt(e.target.closest('.script-card').getAttribute('data-id'));
+                        copyScriptCode(scriptId);
+                    });
+                });
+                
+                document.querySelectorAll('#myScriptsContainer .view-detail-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const scriptId = parseInt(e.target.closest('.script-card').getAttribute('data-id'));
+                        showScriptDetail(scriptId);
+                    });
+                });
+            }, 100);
+        }
+
+        // Show script detail page
+        function showScriptDetail(scriptId) {
+            const script = scripts.find(s => s.id === scriptId);
+            if (!script) return;
+            
+            const detailContainer = document.getElementById('detailContainer');
+            const commentsContainer = document.getElementById('commentsContainer');
+            
+            // Save current script ID for comments
+            localStorage.setItem('currentScriptId', scriptId);
+            
+            detailContainer.innerHTML = `
+                <div style="margin-bottom: 30px;">
+                    <button class="btn btn-outline" id="backToDashboard" style="margin-bottom: 20px;">
+                        <i class="fas fa-arrow-left"></i> Kembali
+                    </button>
+                    
+                    <div class="script-card" style="border: none; box-shadow: none;">
+                        <img src="${script.image}" alt="${script.name}" class="script-image" style="height: 250px;">
+                        <div class="script-content">
+                            <div class="script-header">
+                                <div>
+                                    <h3 class="script-name">${script.name}</h3>
+                                    <p class="script-author"><i class="fas fa-user"></i> ${script.author} • <i class="fas fa-calendar"></i> ${script.publishedDate}</p>
+                                </div>
+                                <div style="color: var(--accent); font-size: 1rem;">
+                                    <i class="fas fa-heart"></i> ${script.likes} Likes
+                                </div>
+                            </div>
+                            <p class="script-desc">${script.description}</p>
+                            <div class="script-tags">
+                                ${script.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                            </div>
+                            <div style="margin: 20px 0; padding: 20px; background-color: rgba(15, 23, 42, 0.5); border-radius: var(--radius); border-left: 3px solid var(--primary);">
+                                <h4 style="margin-bottom: 10px; color: var(--text-primary);">Kode Script:</h4>
+                                <pre style="color: var(--text-secondary); white-space: pre-wrap; font-family: monospace; font-size: 0.9rem;">${script.code}</pre>
+                            </div>
+                            <div class="script-actions">
+                                ${(currentUser || script.publishedBy === 'dinooodev') ? 
+                                    `<button class="copy-btn" id="detailCopyBtn"><i class="fas fa-copy"></i> Copy Script</button>` : 
+                                    `<button class="btn btn-outline" onclick="showNotification('Login terlebih dahulu untuk menyalin script!', 'error')"><i class="fas fa-copy"></i> Login untuk Copy</button>`
+                                }
+                                <button class="btn btn-outline" id="likeScriptBtn"><i class="fas fa-heart"></i> Suka (${script.likes})</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Render comments
+            renderComments(script.comments);
+            
+            // Show detail page
+            showPage('scriptDetail');
+            
+            // Add event listeners
+            document.getElementById('backToDashboard').addEventListener('click', () => {
+                showPage('dashboard');
+            });
+            
+            const detailCopyBtn = document.getElementById('detailCopyBtn');
+            if (detailCopyBtn) {
+                detailCopyBtn.addEventListener('click', () => {
+                    copyScriptCode(scriptId);
+                });
+            }
+            
+            document.getElementById('likeScriptBtn').addEventListener('click', () => {
+                if (!currentUser) {
+                    showNotification('Login terlebih dahulu untuk menyukai script!', 'error');
+                    return;
+                }
+                
+                script.likes++;
+                document.getElementById('likeScriptBtn').innerHTML = `<i class="fas fa-heart"></i> Suka (${script.likes})`;
+                showNotification('Terima kasih atas suka Anda!', 'success');
+            });
+        }
+
+        // Render comments
+        function renderComments(comments) {
+            const commentsContainer = document.getElementById('commentsContainer');
+            
+            if (comments.length === 0) {
+                commentsContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 20px;">Belum ada komentar. Jadilah yang pertama!</p>';
+                return;
+            }
+            
+            let commentsHTML = '';
+            comments.forEach(comment => {
+                commentsHTML += `
+                    <div class="comment">
+                        <div class="comment-header">
+                            <span class="comment-author">${comment.user}</span>
+                            <span class="comment-date">${comment.date}</span>
+                        </div>
+                        <p class="comment-text">${comment.text}</p>
+                    </div>
+                `;
+            });
+            
+            commentsContainer.innerHTML = commentsHTML;
+        }
+
+        // Copy script code to clipboard
+        function copyScriptCode(scriptId) {
+            const script = scripts.find(s => s.id === scriptId);
+            if (!script) return;
+            
+            if (!currentUser && script.publishedBy !== 'dinooodev') {
+                showNotification('Login terlebih dahulu untuk menyalin script!', 'error');
+                return;
+            }
+            
+            navigator.clipboard.writeText(script.code).then(() => {
+                // Show success feedback
+                const copyBtns = document.querySelectorAll(`.script-card[data-id="${scriptId}"] .copy-btn`);
+                copyBtns.forEach(btn => {
+                    btn.innerHTML = '<i class="fas fa-check"></i> Disalin!';
+                    btn.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="fas fa-copy"></i> Copy Script';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                });
+                
+                showNotification('Script berhasil disalin ke clipboard!', 'success');
+            }).catch(err => {
+                console.error('Gagal menyalin: ', err);
+                showNotification('Gagal menyalin script!', 'error');
+            });
+        }
+
+        // Login function
+        function login(username, password) {
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = {
+                    username: user.username,
+                    role: user.role
+                };
+                
+                // Save to localStorage
+                localStorage.setItem('moonEngineUser', JSON.stringify(currentUser));
+                
+                updateUI();
+                showPage('dashboard');
+                showNotification(`Selamat datang, ${username}!`, 'success');
+                
+                // Clear form
+                loginForm.reset();
+            } else {
+                showNotification('Username atau password salah!', 'error');
+            }
+        }
+
+        // Register function
+        function register(username, password) {
+            // Check if username already exists
+            if (users.some(u => u.username === username)) {
+                showNotification('Username sudah digunakan!', 'error');
+                return;
+            }
+            
+            // Add new user
+            const newUser = {
+                username,
+                password,
+                role: 'player' // Default role
+            };
+            
+            users.push(newUser);
+            currentUser = {
+                username: newUser.username,
+                role: newUser.role
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('moonEngineUser', JSON.stringify(currentUser));
+            
+            updateUI();
+            showPage('dashboard');
+            showNotification('Akun berhasil dibuat! Selamat datang.', 'success');
+            
+            // Clear form
+            registerForm.reset();
+        }
+
+        // Logout function
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('moonEngineUser');
+            updateUI();
+            showPage('dashboard');
+            showNotification('Anda telah logout.', 'info');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
